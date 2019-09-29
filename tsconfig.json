@@ -9,5 +9,12 @@
     "esModuleInterop": true,
     "strict": true,
     "lib": ["es2020"]
-  }
+  },
+  "include": ["packages/*/src"],
+  "exclude": [
+    "node_modules/",
+    "packages/*/lib/",
+    "packages/**/__tests__/",
+    "packages/**/__mocks__/"
+  ]
 }

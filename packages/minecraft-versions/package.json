@@ -1,0 +1,16 @@
+{
+  "name": "@minepack/minecraft-versions",
+  "version": "0.1.0",
+  "description": "API for fetching Minecraft version metadata",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf lib",
+    "test": "echo 'No tests yet'"
+  },
+  "devDependencies": {
+    "@types/node-fetch": "^2.5.2"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.0"
+  }
+}

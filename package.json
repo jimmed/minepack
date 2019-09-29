@@ -1,5 +1,5 @@
 {
-  "name": "@bauxite/root",
+  "name": "@minepack/root",
   "private": true,
   "workspaces": [
     "packages/*"
@@ -29,6 +29,7 @@
     "lerna": "^3.16.4",
     "lint-staged": "^9.4.0",
     "prettier": "^1.18.2",
+    "rimraf": "^3.0.0",
     "ts-jest": "^24.1.0",
     "typescript": "^3.6.3"
   }

@@ -1,10 +1,10 @@
-# Bauxite
+# Minepack
 
-A monorepo for all packages in the `@bauxite` namespace.
+A monorepo for all packages in the `@minepack` namespace.
 
 ## Overview
 
-Bauxite is an ecosystem of packages for accessing data from various aspects of the world of Minecraft.
+Minepack is an ecosystem of packages for accessing data from various aspects of the world of Minecraft.
 
 ## APIs
 
