@@ -1,19 +1,12 @@
-import {
-  getVersionListing,
-  GetVersionListingOptions,
-  RawVersion,
-  VersionType,
-} from './remote/getVersionListing'
-import {
-  VersionManifest,
-  getVersionManifest,
-} from './remote/getVersionManifest'
+import { getVersionListing, GetVersionListingOptions, RawVersion, VersionType } from './remote/getVersionListing'
+import { VersionManifest, getVersionManifest } from './remote/getVersionManifest'
+
+interface Predicate<T> {
+  (version: T, index: number, list: T[]): boolean
+}
 
 export class MinecraftVersion {
-  constructor(
-    protected rawDefinition: RawVersion,
-    protected options: Partial<GetVersionListingOptions> = {},
-  ) {}
+  constructor(protected rawDefinition: RawVersion, protected options: Partial<GetVersionListingOptions> = {}) {}
 
   get id(): string {
     return this.rawDefinition.id
@@ -39,29 +32,30 @@ export class MinecraftVersion {
     return getVersionManifest(this.manifestUrl, this.options)
   }
 
-  static from(
-    definition: RawVersion,
-    options?: Partial<GetVersionListingOptions>,
-  ): MinecraftVersion {
+  async getServerDownloadUrl(): Promise<string> {
+    const { downloads } = await this.getVersionManifest()
+    if (!downloads.server) {
+      throw new Error(`Minecraft version ${this.id} has no server download available`)
+    }
+    return downloads.server.url
+  }
+
+  static from(definition: RawVersion, options?: Partial<GetVersionListingOptions>): MinecraftVersion {
     return new MinecraftVersion(definition, options)
   }
 
-  static async getAll(
-    options?: Partial<GetVersionListingOptions>,
-  ): Promise<MinecraftVersion[]> {
+  static async getAll(options?: Partial<GetVersionListingOptions>): Promise<MinecraftVersion[]> {
     const { versions } = await getVersionListing(options)
     return versions.map(version => MinecraftVersion.from(version, options))
   }
 
-  static async getAllIds(
-    options?: Partial<GetVersionListingOptions>,
-  ): Promise<string[]> {
+  static async getAllIds(options?: Partial<GetVersionListingOptions>): Promise<string[]> {
     const { versions } = await getVersionListing(options)
     return versions.map(({ id }) => id)
   }
 
   static async find(
-    finder: (version: RawVersion, index: number, list: RawVersion[]) => boolean,
+    finder: Predicate<RawVersion>,
     options?: Partial<GetVersionListingOptions>,
   ): Promise<MinecraftVersion | null> {
     const { versions } = await getVersionListing(options)
@@ -69,10 +63,7 @@ export class MinecraftVersion {
     return version ? this.from(version, options) : null
   }
 
-  static async getById(
-    id: string,
-    options?: Partial<GetVersionListingOptions>,
-  ): Promise<MinecraftVersion | null> {
+  static async getById(id: string, options?: Partial<GetVersionListingOptions>): Promise<MinecraftVersion | null> {
     return this.find(version => version.id === id)
   }
 
