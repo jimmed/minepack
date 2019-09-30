@@ -6,11 +6,12 @@
   ],
   "scripts": {
     "test": "yarn workspaces run test",
-    "build": "yarn workspaces run build",
-    "clean": "yarn workspaces run clean"
+    "build": "tsc --build packages",
+    "clean": "rimraf packages/*/lib packages/*/tsconfig.tsbuildinfo"
   },
   "husky": {
     "hooks": {
+      "post-checkout": "yarn clean && yarn build --emitDeclarationOnly",
       "pre-commit": "lint-staged",
       "pre-push": "yarn test --ci --bail && yarn audit"
     }
