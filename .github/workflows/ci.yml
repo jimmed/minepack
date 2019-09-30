@@ -1,0 +1,17 @@
+name: Unit tests
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+        name: Setup node
+      - name: Install dependencies
+        run: yarn --frozen-lockfile --no-cache
+      - name: Transpile TypeScript
+        run: yarn build
+      - name: Run unit tests
+        run: yarn test --ci
