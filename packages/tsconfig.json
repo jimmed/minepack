@@ -1,4 +1,4 @@
 {
   "files": [],
-  "references": [{ "path": "./config" }, { "path": "./minecraft-versions" }]
+  "references": [{ "path": "./cache" }, { "path": "./config" }, { "path": "./minecraft-versions" }]
 }
