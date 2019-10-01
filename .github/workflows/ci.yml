@@ -1,5 +1,11 @@
 name: Unit tests
-on: [push]
+on:
+  push:
+    paths-ignore:
+      - 'docs/**'
+      - '.editorconfig'
+      - '.gitignore'
+      - '*.md'
 jobs:
   build:
     runs-on: ubuntu-latest
