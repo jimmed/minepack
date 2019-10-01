@@ -1,6 +1,6 @@
 # Minepack
 
-A monorepo for all packages in the `@minepack` namespace.
+A [monorepository](./docs/monorepo.md) for all packages in the `@minepack` namespace.
 
 ## Overview
 
