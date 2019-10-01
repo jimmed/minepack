@@ -3,8 +3,6 @@
   "version": "0.1.0",
   "description": "API for managing local minepack cache",
   "scripts": {
-    "build": "tsc",
-    "clean": "rimraf lib",
     "test": "echo 'No tests yet'"
   },
   "dependencies": {

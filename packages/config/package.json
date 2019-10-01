@@ -4,8 +4,6 @@
   "description": "API for managing minepack config directory",
   "main": "lib/index.js",
   "scripts": {
-    "build": "tsc",
-    "clean": "rimraf lib",
     "test": "echo 'No tests yet'"
   },
   "devDependencies": {
