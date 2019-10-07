@@ -1,2 +1,2 @@
-export { ConfigDirectory } from './ConfigDirectory'
-export { Directory } from './Directory'
+export * from './ConfigDirectory'
+export * from './ConfigFile'

@@ -1,13 +1,10 @@
 {
-  "name": "@minepack/cache",
+  "name": "@minepack/fs",
   "version": "0.1.0",
-  "description": "API for managing local minepack cache",
+  "description": "API for interacting with the filesystem",
+  "main": "lib/index.js",
   "scripts": {
     "test": "echo 'No tests yet'"
-  },
-  "dependencies": {
-    "@minepack/config": "^0.1.0",
-    "@minepack/fs": "^0.1.0"
   },
   "devDependencies": {
     "@types/node": "^12.7.8"

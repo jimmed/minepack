@@ -6,8 +6,13 @@
   "scripts": {
     "test": "echo 'No tests yet'"
   },
+  "dependencies": {
+    "@minepack/fs": "^0.1.0",
+    "semver": "^6.3.0"
+  },
   "devDependencies": {
-    "@types/node": "^12.7.8"
+    "@types/node": "^12.7.8",
+    "@types/semver": "^6.0.2"
   },
   "engines": {
     "node": ">=12.10.0"
