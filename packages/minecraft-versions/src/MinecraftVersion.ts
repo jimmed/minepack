@@ -75,6 +75,7 @@ export class MinecraftVersion {
     if (type === VersionType.release || type === VersionType.snapshot) {
       return this.getById(latest[type], options)
     }
+    // This depends on the versions being ordered by date already
     return this.find(version => version.type === type)
   }
 }

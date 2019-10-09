@@ -28,7 +28,7 @@ export class JsonFile<T = unknown> extends TextFile {
     super(root, dir, base, ext, name, 'utf8')
   }
 
-  static from<T>(pathOrFile: PathLike): JsonFile<T> {
+  static fromPath<T>(pathOrFile: PathLike): JsonFile<T> {
     if (pathOrFile instanceof JsonFile) {
       return pathOrFile
     }
@@ -41,7 +41,7 @@ export class JsonFile<T = unknown> extends TextFile {
     value: T,
     options?: WriteFileOptions & JsonStringifyOptions,
   ): Promise<JsonFile<T>> {
-    const file = JsonFile.from<T>(path)
+    const file = JsonFile.fromPath<T>(path)
     await file.ensureParentDirectoryExists()
     await file.writeFromJson(value, options)
     return file
