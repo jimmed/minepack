@@ -9,6 +9,8 @@
     "strict": true,
     "composite": true,
     "esModuleInterop": true,
-    "lib": ["es2020"]
-  }
+    "lib": ["es2020"],
+    "incremental": true
+  },
+  "exclude": ["**/__tests__/**", "**/__mocks__/**", "**/*.test.ts"]
 }
