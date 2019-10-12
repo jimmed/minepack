@@ -1,45 +1,52 @@
-import { ParsedPath, resolve, format, parse } from 'path'
 import { promises as fs } from 'fs'
+import { format, parse, ParsedPath, resolve } from 'path'
 
 export type PathLike = Path | ParsedPath | string
 
+/**
+ * Provides filesystem path resolution methods, as well as a base class for files and directories
+ */
 export class Path implements ParsedPath {
-  static from(path: PathLike): Path {
-    if (path instanceof Path) {
-      return path
-    }
+  private readonly parsedPath: ParsedPath
+
+  constructor(path: PathLike) {
     if (typeof path === 'string') {
-      return this.fromString(path)
+      this.parsedPath = parse(path)
+    } else {
+      this.parsedPath = path
     }
-    return this.fromObject(path)
-  }
-
-  static fromString(path: string): Path {
-    return this.fromObject(parse(path))
-  }
-
-  static fromObject({ root, dir, base, ext, name }: ParsedPath): Path {
-    return new Path(root, dir, base, ext, name)
-  }
-
-  protected constructor(
-    readonly root: string,
-    readonly dir: string,
-    readonly base: string,
-    readonly ext: string,
-    readonly name: string,
-  ) {}
-
-  toString(): string {
-    return format(this)
-  }
-
-  resolve(...pathSegments: string[]): Path {
-    return Path.from(resolve(this.path, ...pathSegments))
   }
 
   get path(): string {
     return this.toString()
+  }
+  get base(): string {
+    return this.parsedPath.base
+  }
+  get dir(): string {
+    return this.parsedPath.dir
+  }
+  get ext(): string {
+    return this.parsedPath.ext
+  }
+  get name(): string {
+    return this.parsedPath.name
+  }
+  get root(): string {
+    return this.parsedPath.root
+  }
+
+  toString(): string {
+    return format(this.parsedPath)
+  }
+
+  toJSON(): ParsedPath {
+    const { base, dir, ext, name, root } = this
+    return { base, dir, ext, name, root }
+  }
+
+  resolve(...pathSegments: string[]): Path {
+    return new Path(resolve(this.dir, ...pathSegments))
   }
 
   async exists({ mode, quiet = true }: { mode?: number; quiet?: boolean } = {}): Promise<boolean> {

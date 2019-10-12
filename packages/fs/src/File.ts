@@ -1,15 +1,5 @@
+import { createReadStream, createWriteStream, promises as fs, ReadStream, WriteStream } from 'fs'
 import { Path, PathLike } from './Path'
-import {
-  ReadStream,
-  createReadStream,
-  WriteStream,
-  createWriteStream,
-  promises as fs,
-  write,
-  promises,
-  Stats,
-} from 'fs'
-import { Directory } from './Directory'
 
 export interface ReadStreamOptions {
   flags?: string
@@ -48,39 +38,18 @@ export interface FileWriteProgress<S extends NodeJS.ReadableStream> {
 }
 
 export class File extends Path {
-  protected constructor(root: string, dir: string, base: string, ext: string, name: string) {
-    super(root, dir, base, ext, name)
-  }
-
-  get directory(): Directory {
-    return Directory.from(this.dir)
-  }
-
-  static from(path: PathLike): File {
-    if (path instanceof File) {
-      return path
-    }
-    const { root, dir, base, ext, name } = Path.from(path)
-    return new File(root, dir, base, ext, name)
-  }
-
-  async ensureParentDirectoryExists(): Promise<void> {
-    await this.directory.create()
-  }
-
-  static async createFromBuffer(path: PathLike, buffer: Buffer): Promise<File> {
-    const file = File.from(path)
-    await file.ensureParentDirectoryExists()
+  static async createFromBuffer<T extends File>(this: typeof File, path: PathLike, buffer: Buffer): Promise<T> {
+    const file = new this(path) as T
     await file.writeFromBuffer(buffer)
     return file
   }
 
-  static createFromStream<S extends NodeJS.ReadableStream>(
+  static createFromStream<T extends File, S extends NodeJS.ReadableStream>(
     path: PathLike,
     readStream: S,
     options?: ReadStreamOptions,
-  ): FileWriteProgress<S> & { file: File } {
-    const file = File.from(path)
+  ): FileWriteProgress<S> & { file: T } {
+    const file = new this(path) as T
     const writeProgress = file.writeFromStream(readStream, options)
     return {
       ...writeProgress,
@@ -118,7 +87,19 @@ export class File extends Path {
     }
   }
 
-  async getStat(): Promise<Stats> {
-    return fs.lstat(this.path)
+  async move<T extends Path>(this: T, destinationPath: PathLike): Promise<T> {
+    const destination = new (this.constructor as typeof Path)(destinationPath) as T
+    await fs.rename(this.path, destination.path)
+    return destination
+  }
+
+  async copy<T extends Path>(this: T, destinationPath: PathLike): Promise<T> {
+    const destination = new (this.constructor as typeof Path)(destinationPath) as T
+    await fs.copyFile(this.path, destination.path)
+    return destination
+  }
+
+  async delete(): Promise<void> {
+    await fs.unlink(this.path)
   }
 }

@@ -1,35 +1,20 @@
-import { File, ReadFileOptions, WriteFileOptions } from './File'
-import { PathLike, Path } from './Path'
 import { promises as fs } from 'fs'
+import { File, ReadFileOptions, WriteFileOptions } from './File'
+import { PathLike } from './Path'
 
 export class TextFile extends File {
-  protected constructor(
-    root: string,
-    dir: string,
-    base: string,
-    ext: string,
-    name: string,
-    readonly encoding: BufferEncoding,
-  ) {
-    super(root, dir, base, ext, name)
+  constructor(parsed: PathLike, private readonly encoding: BufferEncoding = 'utf8') {
+    super(parsed)
   }
 
-  static from(path: PathLike, encoding: BufferEncoding = 'utf8'): TextFile {
-    if (path instanceof TextFile) {
-      return path
-    }
-    const { root, dir, base, ext, name } = Path.from(path)
-    return new TextFile(root, dir, base, ext, name, encoding)
-  }
-
-  static async createFromText(
+  static async createFromText<T extends TextFile>(
+    this: typeof TextFile,
     path: PathLike,
     text: string,
     encoding: BufferEncoding = 'utf8',
-    writeOptions: WriteFileOptions,
-  ): Promise<TextFile> {
-    const file = TextFile.from(path, encoding)
-    await file.ensureParentDirectoryExists()
+    writeOptions?: WriteFileOptions,
+  ): Promise<T> {
+    const file = new this(path, encoding) as T
     await file.writeFromText(text, writeOptions)
     return file
   }

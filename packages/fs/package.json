@@ -4,10 +4,12 @@
   "description": "API for interacting with the filesystem",
   "main": "lib/index.js",
   "scripts": {
-    "test": "echo 'No tests yet'"
+    "test": "jest"
   },
   "devDependencies": {
-    "@types/node": "^12.7.8"
+    "@types/node": "^12.7.8",
+    "babel-runtime": "^6.26.0",
+    "jest-plugin-fs": "^2.9.0"
   },
   "engines": {
     "node": ">=12.10.0"

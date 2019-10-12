@@ -1,4 +1,4 @@
-import { JsonFile, Path, PathLike } from '@minepack/fs'
+import { JsonFile, PathLike } from '@minepack/fs'
 import { normalize } from 'path'
 import semver from 'semver'
 import { ConfigValidationError } from './error'
@@ -29,12 +29,8 @@ export interface MinepackConfigMetadata {
 export type MinepackConfigWithMetadata = MinepackConfig & { lastUpdateBy: MinepackConfigMetadata }
 
 export class ConfigFile extends JsonFile<MinepackConfigWithMetadata> {
-  static from(pathOrFile: PathLike): ConfigFile {
-    if (pathOrFile instanceof ConfigFile) {
-      return pathOrFile
-    }
-    const { root, dir, base, ext, name } = Path.from(pathOrFile)
-    return new ConfigFile(root, dir, base, ext, name)
+  constructor(path: PathLike) {
+    super(path)
   }
 
   static get version() {
@@ -105,8 +101,7 @@ export class ConfigFile extends JsonFile<MinepackConfigWithMetadata> {
   }
 
   static async create(path: PathLike, config: MinepackConfig): Promise<ConfigFile> {
-    const file = ConfigFile.from(path)
-    await file.ensureParentDirectoryExists()
+    const file = new ConfigFile(path)
     await file.updateConfig(config)
     return file
   }

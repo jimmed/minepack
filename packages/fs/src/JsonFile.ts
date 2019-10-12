@@ -1,6 +1,7 @@
 import { TextFile } from './TextFile'
 import { PathLike, Path } from './Path'
 import { ReadFileOptions, WriteFileOptions } from './File'
+import { ParsedPath } from 'path'
 
 export interface JsonParseOptions {
   /**
@@ -23,26 +24,18 @@ export interface JsonStringifyOptions {
 
 export type JsonFileUpdateOptions = ReadFileOptions & WriteFileOptions & JsonParseOptions & JsonStringifyOptions
 
-export class JsonFile<T = unknown> extends TextFile {
-  protected constructor(root: string, dir: string, base: string, ext: string, name: string) {
-    super(root, dir, base, ext, name, 'utf8')
+export class JsonFile<T> extends TextFile {
+  constructor(parsed: PathLike) {
+    super(parsed, 'utf8')
   }
 
-  static fromPath<T>(pathOrFile: PathLike): JsonFile<T> {
-    if (pathOrFile instanceof JsonFile) {
-      return pathOrFile
-    }
-    const { root, dir, base, ext, name } = Path.from(pathOrFile)
-    return new JsonFile(root, dir, base, ext, name)
-  }
-
-  static async createFromJson<T>(
+  static async createFromJson<T, I extends JsonFile<T>, C extends typeof JsonFile>(
+    this: C,
     path: PathLike,
     value: T,
     options?: WriteFileOptions & JsonStringifyOptions,
-  ): Promise<JsonFile<T>> {
-    const file = JsonFile.fromPath<T>(path)
-    await file.ensureParentDirectoryExists()
+  ): Promise<I> {
+    const file = new this<T>(path) as I
     await file.writeFromJson(value, options)
     return file
   }
@@ -68,6 +61,6 @@ export class JsonFile<T = unknown> extends TextFile {
   }
 
   async patchJson(patch: Partial<T>, options?: JsonFileUpdateOptions): Promise<T> {
-    return this.updateJson(oldValue => ({ ...oldValue, patch }), options)
+    return this.updateJson(oldValue => ({ ...oldValue, ...patch }), options)
   }
 }
