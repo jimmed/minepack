@@ -1,0 +1,11 @@
+{
+  "name": "@minepack/installer",
+  "version": "0.1.0",
+  "main": "./lib/index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "@minepack/fs": "0.1.0"
+  }
+}

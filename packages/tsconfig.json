@@ -1,4 +1,20 @@
 {
   "files": [],
-  "references": [{ "path": "./fs" }, { "path": "./cache" }, { "path": "./config" }, { "path": "./minecraft-versions" }]
+  "references": [
+    {
+      "path": "./cache"
+    },
+    {
+      "path": "./config"
+    },
+    {
+      "path": "./fs"
+    },
+    {
+      "path": "./installer"
+    },
+    {
+      "path": "./minecraft-versions"
+    }
+  ]
 }
