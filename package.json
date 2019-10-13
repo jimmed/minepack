@@ -7,7 +7,8 @@
   "scripts": {
     "test": "yarn workspaces run test",
     "build": "yarn clean && tsc --build packages",
-    "clean": "rimraf packages/*/lib packages/*/tsconfig.tsbuildinfo"
+    "clean": "rimraf packages/*/lib packages/*/tsconfig.tsbuildinfo",
+    "package:create": "node scripts/create-package"
   },
   "husky": {
     "hooks": {
