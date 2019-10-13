@@ -1,7 +1,6 @@
+import { createReadStream } from 'fs'
 import fs from 'jest-plugin-fs'
 import { File } from '../'
-import { Readable } from 'stream'
-import { createReadStream } from 'fs'
 
 jest.mock('fs', () => require('jest-plugin-fs/mock'))
 
